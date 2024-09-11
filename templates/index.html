@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Semantic Search</h1>
+        <form id="search-form" class="form-inline ">
+            <input type="text" id="search-query" class="form-control mr-2" placeholder="Search...">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <div id="results" class="mt-4"></div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#search-form').on('submit', function(event) {
+                event.preventDefault();
+                var query = $('#search-query').val();
+                $.ajax({
+                    url: '/search',
+                    type: 'get',
+                    data: { q: query },
+                    success: function(data) {
+                        var resultsDiv = $('#results');
+                        resultsDiv.empty();
+                        if (data.length === 0) {
+                            resultsDiv.append('<p>No results found</p>');
+                        } else {
+                            data.forEach(function(result) {
+                                resultsDiv.append('<div><div><strong><a href="/">'+result.author+'<a/></strong> </div><p>' + result.content + '</p></div>');
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
